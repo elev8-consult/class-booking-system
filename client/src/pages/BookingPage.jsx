@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
+import { getWeekNumber, getWeeksInYear } from '../utils/week';
+import logo from '../logo.jpg';
 
 export default function BookingPage() {
   const navigate = useNavigate();
@@ -10,9 +12,14 @@ export default function BookingPage() {
   const [countryCode, setCountryCode] = useState('+1');
   const [phone, setPhone] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedWeek, setSelectedWeek] = useState('');
+  const [weeks, setWeeks] = useState([]);
 
   useEffect(() => {
     api.get('/api/events').then(r => setEvents(r.data));
+    // Populate weeks for current year
+    const year = new Date().getFullYear();
+    setWeeks(getWeeksInYear(year));
   }, []);
 
   const openModal = ev => {
@@ -76,11 +83,34 @@ export default function BookingPage() {
     }
   };
 
+  // Filter events by selected week
+  const filteredEvents = selectedWeek
+    ? events.filter(e => getWeekNumber(new Date(e.date)) === Number(selectedWeek))
+    : events;
+
   return (
-    <div className="p-4 max-w-2xl mx-auto">
+    <div className="p-4 max-w-2xl mx-auto" style={{ backgroundColor: '#EFE7DA', minHeight: '100vh' }}>
+      <div className="flex justify-center mb-6">
+        <img src={logo} alt="Logo" className="h-20 rounded-full shadow" />
+      </div>
       <h1 className="text-2xl mb-4">Book a Class</h1>
+      <div className="mb-4">
+        <label className="block mb-1 font-medium">Choose Week</label>
+        <select
+          className="w-full p-2 border rounded"
+          value={selectedWeek}
+          onChange={e => setSelectedWeek(e.target.value)}
+        >
+          <option value="">All Weeks</option>
+          {weeks.map(w => (
+            <option key={w.week} value={w.week}>
+              Week {w.week}: {w.start.toLocaleDateString()} - {w.end.toLocaleDateString()}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="space-y-4">
-        {events.map(e => {
+        {filteredEvents.map(e => {
           const seatsLeft = e.maxSeats - e.booked;
           return (
             <div key={e._id} className="p-4 bg-white rounded shadow flex justify-between items-start">
@@ -93,7 +123,7 @@ export default function BookingPage() {
               {seatsLeft > 0
                 ? <button
                     onClick={() => openModal(e)}
-                    className="px-4 py-2 bg-blue-600 text-white rounded"
+                    className="px-4 py-2 bg-[#BFA980] text-white rounded hover:bg-[#a08c6a]"
                   >
                     Book ({seatsLeft} left)
                   </button>
@@ -209,7 +239,7 @@ export default function BookingPage() {
               className={`w-full p-2 rounded text-white ${
                 isSubmitting ? 'bg-gray-400 cursor-not-allowed' :
                 name.trim() && phone.length >= 6 
-                  ? 'bg-green-600 hover:bg-green-700' 
+                  ? 'bg-[#BFA980] hover:bg-[#a08c6a]' 
                   : 'bg-gray-400 cursor-not-allowed'
               }`}
             >

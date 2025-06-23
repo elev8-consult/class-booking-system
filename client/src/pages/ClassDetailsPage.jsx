@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../api/axios';
+import logo from '../logo.jpg';
 
 export default function ClassDetailsPage() {
   const { id } = useParams();
@@ -68,7 +69,10 @@ export default function ClassDetailsPage() {
   if (!event) return <div className="p-4">Event not found</div>;
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
+    <div className="max-w-4xl mx-auto p-4" style={{ backgroundColor: '#EFE7DA', minHeight: '100vh' }}>
+      <div className="flex justify-center mb-6">
+        <img src={logo} alt="Logo" className="h-20 rounded-full shadow" />
+      </div>
       <div className="mb-4">
         <Link to="/aura-admin" className="text-blue-600 hover:underline">
           ← Back to Admin

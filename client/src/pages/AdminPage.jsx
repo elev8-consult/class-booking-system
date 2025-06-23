@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import api from '../api/axios'
+import logo from '../logo.jpg'
 
 export default function AdminPage() {
   const [name, setName] = useState('')
@@ -42,7 +43,11 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="p-4 max-w-md mx-auto space-y-8">
+    <div className="p-4 max-w-md mx-auto space-y-8" style={{ backgroundColor: '#EFE7DA', minHeight: '100vh' }}>
+      <div className="flex justify-center mb-6">
+        <img src={logo} alt="Logo" className="h-20 rounded-full shadow" />
+      </div>
+
       <h1 className="text-2xl">Admin</h1>
 
       <form onSubmit={addInstructor} className="space-y-2">
@@ -52,7 +57,7 @@ export default function AdminPage() {
           placeholder="Name" required
           className="w-full p-2 border rounded"
         />
-        <button className="px-4 py-2 bg-green-600 text-white rounded">Save</button>
+        <button className="px-4 py-2 bg-[#BFA980] text-white rounded hover:bg-[#a08c6a]">Save</button>
       </form>
 
       <div className="mb-8">
@@ -138,7 +143,7 @@ export default function AdminPage() {
           min="1" className="w-full p-2 border rounded"
         />
 
-        <button className="px-4 py-2 bg-blue-600 text-white rounded">Create Class</button>
+        <button className="px-4 py-2 bg-[#BFA980] text-white rounded hover:bg-[#a08c6a]">Create Class</button>
       </form>
     </div>
   )

@@ -36,7 +36,7 @@ export default function BookingForm({ onAdd }) {
           <option key={i._id} value={i._id}>{i.name}</option>
         ))}
       </select>
-      <button type="submit" className="w-full p-2 bg-blue-600 text-white rounded">
+      <button type="submit" className="w-full p-2 bg-[#BFA980] text-white rounded hover:bg-[#a08c6a]">
         Add Booking
       </button>
     </form>
